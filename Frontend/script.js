@@ -9,10 +9,6 @@ document.getElementById('complaintForm').addEventListener('submit', async functi
     statusMessage.className = 'status-message hidden';
     statusMessage.textContent = '';
     
-    // Add loading state
-    submitBtn.classList.add('loading');
-    submitBtn.disabled = true;
-    
     // Gather form data
     const formData = {
         name: document.getElementById('name').value,
@@ -20,6 +16,17 @@ document.getElementById('complaintForm').addEventListener('submit', async functi
         mobile: document.getElementById('mobile').value,
         complaint: document.getElementById('complaint').value
     };
+
+    // Mobile number validation
+    if (!/^\d{10}$/.test(formData.mobile)) {
+        statusMessage.textContent = 'Mobile number must be exactly 10 digits.';
+        statusMessage.className = 'status-message error';
+        return; // Stop form submission
+    }
+    
+    // Add loading state
+    submitBtn.classList.add('loading');
+    submitBtn.disabled = true;
     
     try {
         const response = await fetch('http://127.0.0.1:3030/api/complaints', {
